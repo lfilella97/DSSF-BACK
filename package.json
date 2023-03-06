@@ -9,9 +9,13 @@
     "build:dev": "tsc --watch",
     "test": "jest",
     "test:coverage": "jest --coverage --passWithNoTests",
-    "start": "node dist"
+    "start": "node dist",
+    "prepare": "husky install"
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "husky": "^8.0.0"
+  }
 }
