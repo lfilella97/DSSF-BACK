@@ -1,0 +1,1 @@
+const dryStone = "structureFinder";
