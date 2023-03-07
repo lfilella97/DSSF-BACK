@@ -7,8 +7,8 @@
   "scripts": {
     "build": "tsc",
     "build:dev": "tsc --watch",
-    "test": "jest --passWithNoTests",
-    "test:coverage": "jest --coverage --passWithNoTests",
+    "test": "jest",
+    "test:coverage": "jest --coverage",
     "start": "node dist",
     "prepare": "husky install"
   },
