@@ -2,9 +2,9 @@ import { NextFunction, Request, Response } from "express";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 import debug from "debug";
-import { UserCredentials } from "../../types";
 import CustomError from "../../../CustomError/CustomError.js";
-import User from "../../../database/models/userSchema/userSchema.js";
+import { User } from "../../../database/models/userSchema/userSchema.js";
+import { UserCredentials } from "../../types.js";
 
 const createDebug = debug("DSSF:login");
 
@@ -19,7 +19,7 @@ const loginUser = async (
 ) => {
   const { userName, password } = req.body;
 
-  const user = await User.findOne({ userName });
+  const user = await User.findOne({ userName }).exec();
 
   if (!user) {
     const userNameError = new CustomError(
@@ -32,7 +32,7 @@ const loginUser = async (
     return;
   }
 
-  const isPassword = await bcrypt.compare(password, user.password);
+  const isPassword = await bcrypt.compare(password, user.password)!;
 
   if (!isPassword) {
     const customError = new CustomError(
