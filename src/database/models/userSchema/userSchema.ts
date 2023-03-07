@@ -11,8 +11,10 @@ const userSchema = new Schema({
     type: String,
     required: true,
   },
+  isAdmin: {
+    type: String,
+    required: true,
+  },
 });
 
-const User = model("User", userSchema, "users");
-
-export default User;
+export const User = model("User", userSchema, "users");
