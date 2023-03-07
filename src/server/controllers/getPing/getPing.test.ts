@@ -8,7 +8,7 @@ const response: Partial<Response> = {
 };
 
 describe("Given getPing controller", () => {
-  describe("When it receieves any request", () => {
+  describe("When it receives any request", () => {
     test("Then it should emit a response with text 'ping'", async () => {
       const status = 200;
 
@@ -17,7 +17,7 @@ describe("Given getPing controller", () => {
       expect(response.status).toBeCalledWith(status);
     });
 
-    test("Then it shpuld emit a response with status 200", async () => {
+    test("Then it should emit a response with status 200", async () => {
       await getPing(request as Request, response as Response);
 
       expect(response.json).toBeCalledWith("pong");
