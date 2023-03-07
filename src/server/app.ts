@@ -1,5 +1,5 @@
 import express from "express";
-import getPing from "./controllers/getPing/getPing";
+import getPing from "./controllers/getPing/getPing.js";
 
 const app = express();
 
