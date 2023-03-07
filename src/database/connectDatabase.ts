@@ -1,7 +1,7 @@
 import debug from "debug";
 import mongoose from "mongoose";
 
-const createDebug = debug("dryStoneStructureFinder:database");
+const createDebug = debug("DSSF:database");
 
 mongoose.set("strictQuery", false);
 
