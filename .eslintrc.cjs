@@ -8,7 +8,10 @@ module.exports = {
     {
       extends: ["xo-typescript", "prettier"],
       files: ["*.ts", "*.tsx"],
-      rules: { "no-implicit-coercion": "off" },
+      rules: {
+        "no-implicit-coercion": "off",
+        "@typescript-eslint/naming-convention": "off",
+      },
     },
   ],
   parserOptions: {
