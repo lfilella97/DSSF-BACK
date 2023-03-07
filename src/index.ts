@@ -1,1 +1,1 @@
-const dryStone = "structureFinder";
+import "loadEnvironment.js";
