@@ -1,5 +1,5 @@
 import debug from "debug";
-import app from "./app";
+import app from "./app.js";
 
 const createDebug = debug("dryStoneStructureFinder:server");
 
