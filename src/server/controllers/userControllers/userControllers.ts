@@ -1,3 +1,4 @@
+import "./../../../loadEnvironment.js";
 import { type NextFunction, type Request, type Response } from "express";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
@@ -20,28 +21,15 @@ const loginUser = async (
   const { userName, password } = req.body;
   try {
     const user = await User.findOne({ userName }).exec();
-    if (!user) {
-      const userNameError = new CustomError(
-        "Incorrect userName",
-        400,
-        "Wrong credentials"
-      );
 
-      next(userNameError);
-      return;
+    if (!user) {
+      throw new CustomError("Incorrect userName", 400, "Wrong credentials");
     }
 
     const isPassword = await bcrypt.compare(password, user.password!);
 
     if (!isPassword) {
-      const customError = new CustomError(
-        "Incorrect password",
-        401,
-        "Wrong credentials"
-      );
-
-      next(customError);
-      return;
+      throw new CustomError("Incorrect password", 401, "Wrong credentials");
     }
 
     const jwtPayload = {
@@ -56,12 +44,7 @@ const loginUser = async (
 
     res.status(200).json({ token });
   } catch (error) {
-    const customError = new CustomError(
-      (error as Error).message,
-      500,
-      "Internal server error"
-    );
-    next(customError);
+    next(error);
   }
 };
 

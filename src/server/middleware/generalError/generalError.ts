@@ -10,9 +10,11 @@ export const generalError = (
   res: Response,
   next: NextFunction
 ) => {
-  debug((error as Error).message);
+  debug(error.message);
 
-  res.status(error.statusCode).json({ error: error.publicMessage });
+  res
+    .status(error.statusCode || 500)
+    .json({ error: error.publicMessage || "Something went wrong" });
 };
 
 export default generalError;
