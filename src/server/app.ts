@@ -23,8 +23,7 @@ app.disable("x-powered-by");
 app.use(morgan("dev"));
 app.use(express.json());
 
-app.use("/", getPing);
-
+app.get("/", getPing);
 app.use("/user", userRouter);
 
 app.use(notFoundError);
