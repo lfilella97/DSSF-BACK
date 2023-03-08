@@ -9,9 +9,10 @@ module.exports = {
       extends: ["xo-typescript", "prettier"],
       files: ["*.ts", "*.tsx"],
       rules: {
-        "no-implicit-coercion": "off",
-        "@typescript-eslint/consistent-type-imports": "off",
-        "@typescript-eslint/consistent-type-definitions": "off",
+        "@typescript-eslint/consistent-type-definitions": [
+          "error",
+          "interface",
+        ],
       },
     },
     {
@@ -23,5 +24,8 @@ module.exports = {
     ecmaVersion: "latest",
     sourceType: "module",
   },
-  rules: {},
+  rules: {
+    "new-cap": ["error", { capIsNewExceptions: ["Router"] }],
+    "no-implicit-coercion": "off",
+  },
 };

@@ -1,12 +1,12 @@
-import { NextFunction, Request, Response } from "express";
+import { type NextFunction, type Request, type Response } from "express";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
-import debug from "debug";
+import createDebug from "debug";
 import CustomError from "../../../CustomError/CustomError.js";
 import { User } from "../../../database/models/userSchema/userSchema.js";
-import { UserCredentials } from "../../types.js";
+import { type UserCredentials } from "../../types.js";
 
-const createDebug = debug("DSSF:login");
+const debug = createDebug("DSSF:ruters:userController:login");
 
 const loginUser = async (
   req: Request<
@@ -31,7 +31,7 @@ const loginUser = async (
       return;
     }
 
-    const isPassword = await bcrypt.compare(password, user.password)!;
+    const isPassword = await bcrypt.compare(password, user.password!);
 
     if (!isPassword) {
       const customError = new CustomError(
@@ -52,7 +52,7 @@ const loginUser = async (
 
     const token = jwt.sign(jwtPayload, process.env.JWT_SECRET!);
 
-    createDebug(`${userName} has been logged succesfully`);
+    debug(`${userName} has been logged succesfully`);
 
     res.status(200).json({ token });
   } catch (error) {

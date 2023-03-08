@@ -1,8 +1,8 @@
-import debug from "debug";
+import createDebug from "debug";
 import type CustomError from "../CustomError/CustomError.js";
 import app from "./app.js";
 
-const createDebug = debug("DSSF:server");
+const debugg = createDebug("DSSF:server");
 
 const startServer = async (port: number) => {
   await new Promise((resolve, reject) => {
@@ -12,14 +12,14 @@ const startServer = async (port: number) => {
 
     server.on("error", (error: CustomError) => {
       if (error.code === "EADDRINUSE") {
-        createDebug(`${error.code}: port ${port} already in use`);
+        debugg(`${error.code}: port ${port} already in use`);
       }
 
-      reject(new Error(error.code));
+      reject(error);
     });
   });
 
-  createDebug(`Server started at http://localhost:${port}`);
+  debugg(`Server started at http://localhost:${port}`);
 };
 
 export default startServer;

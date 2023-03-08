@@ -1,12 +1,12 @@
-import debug from "debug";
+import createDebug from "debug";
 import mongoose from "mongoose";
 
-const createDebug = debug("DSSF:database");
+const debug = createDebug("DSSF:database");
 
 mongoose.set("strictQuery", false);
 
 const connectDatabase = async (url: string) => {
-  createDebug("Database conected");
+  debug("Database conected");
 
   await mongoose.connect(url);
 };

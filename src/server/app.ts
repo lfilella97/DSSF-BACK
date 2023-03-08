@@ -22,7 +22,7 @@ app.disable("x-powered-by");
 app.use(morgan("dev"));
 app.use(express.json());
 
-app.use("/ping", getPing);
+app.use("/", getPing);
 
 app.use(notFoundError);
 app.use(generalError);
