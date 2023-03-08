@@ -1,14 +1,14 @@
-import { JwtPayload } from "jsonwebtoken";
-
-export interface RegisterUserCredentials extends UserCredentials {
+export interface RegisterUserCredentials {
   email: string;
-}
-
-export interface UserCredentials {
   userName: string;
   password: string;
 }
-
-export interface CustomJwtPayload extends JwtPayload {
-  sub: string;
+export type UserCredentials = Pick<
+  RegisterUserCredentials,
+  "userName" | "password"
+>;
+export interface CustomJwtPayload {
+  id: string;
+  userName: string;
+  isAdmin: boolean;
 }

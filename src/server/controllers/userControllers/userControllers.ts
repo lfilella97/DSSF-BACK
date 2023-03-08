@@ -18,42 +18,51 @@ const loginUser = async (
   next: NextFunction
 ) => {
   const { userName, password } = req.body;
+  try {
+    const user = await User.findOne({ userName }).exec();
+    if (!user) {
+      const userNameError = new CustomError(
+        "Incorrect userName",
+        400,
+        "Wrong credentials"
+      );
 
-  const user = await User.findOne({ userName }).exec();
+      next(userNameError);
+      return;
+    }
 
-  if (!user) {
-    const userNameError = new CustomError(
-      "Incorrect userName",
-      400,
-      "Wrong credentials"
-    );
+    const isPassword = await bcrypt.compare(password, user.password)!;
 
-    next(userNameError);
-    return;
-  }
+    if (!isPassword) {
+      const customError = new CustomError(
+        "Incorrect password",
+        401,
+        "Wrong credentials"
+      );
 
-  const isPassword = await bcrypt.compare(password, user.password)!;
+      next(customError);
+      return;
+    }
 
-  if (!isPassword) {
+    const jwtPayload = {
+      id: user?._id,
+      userName: user?.userName,
+      isAdmin: user?.isAdmin,
+    };
+
+    const token = jwt.sign(jwtPayload, process.env.JWT_SECRET!);
+
+    createDebug(`${userName} has been logged succesfully`);
+
+    res.status(200).json({ token });
+  } catch (error) {
     const customError = new CustomError(
-      "Incorrect password",
-      401,
-      "Incorrect credentials"
+      (error as Error).message,
+      500,
+      "Internal server error"
     );
-
     next(customError);
-    return;
   }
-
-  const jwtPayload = {
-    sub: user?._id,
-  };
-
-  const token = jwt.sign(jwtPayload, process.env.JWT_SECRET!);
-
-  createDebug("User logged in");
-
-  res.status(200).json({ token });
 };
 
 export default loginUser;
