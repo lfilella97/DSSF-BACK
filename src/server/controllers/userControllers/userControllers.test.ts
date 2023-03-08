@@ -4,7 +4,7 @@ import { type NextFunction, type Request, type Response } from "express";
 import { User } from "../../../database/models/userSchema/userSchema";
 import loginUser from "./userControllers";
 import CustomError from "../../../CustomError/CustomError";
-import { UserCredentials } from "../../types";
+import { type UserCredentials } from "../../types";
 
 const bernat: UserCredentials = {
   password: "bernat",

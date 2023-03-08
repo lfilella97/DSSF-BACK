@@ -1,8 +1,8 @@
 import { type Request, type Response, type NextFunction } from "express";
-import debug from "debug";
+import createDebug from "debug";
 import type CustomError from "../../../CustomError/CustomError.js";
 
-const createDebug = debug("DSSF:generalError");
+const debug = createDebug("DSSF:generalError");
 
 export const generalError = (
   error: CustomError,
@@ -10,9 +10,11 @@ export const generalError = (
   res: Response,
   next: NextFunction
 ) => {
-  createDebug((error as Error).message);
+  debug(error.message);
 
-  res.status(error.statusCode).json({ error: error.publicMessage });
+  res
+    .status(error.statusCode || 500)
+    .json({ error: error.publicMessage || "Something went wrong" });
 };
 
 export default generalError;
