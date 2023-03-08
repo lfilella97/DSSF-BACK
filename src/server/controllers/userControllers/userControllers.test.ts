@@ -1,7 +1,6 @@
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { type NextFunction, type Request, type Response } from "express";
-
 import { User } from "../../../database/models/userSchema/userSchema";
 import loginUser from "./userControllers";
 import CustomError from "../../../CustomError/CustomError";
@@ -87,6 +86,26 @@ describe("Given logInUser controller", () => {
         }),
       }));
       bcrypt.compare = jest.fn().mockResolvedValue(false);
+
+      await loginUser(request as CustomRequest, response as Response, next);
+
+      expect(next).toBeCalledWith(customError);
+    });
+  });
+
+  describe("When it recieves a request with bernat and the database throws an error`", () => {
+    test("Then it should call next function with", async () => {
+      const customError = new CustomError(
+        "Server not responding",
+        500,
+        "Internal server error"
+      );
+
+      const next: NextFunction = jest.fn().mockReturnThis();
+
+      User.findOne = jest.fn().mockImplementation(() => ({
+        exec: jest.fn().mockRejectedValue(customError),
+      }));
 
       await loginUser(request as CustomRequest, response as Response, next);
 
