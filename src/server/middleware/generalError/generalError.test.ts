@@ -1,4 +1,5 @@
 import { type Response, type Request, type NextFunction } from "express";
+import { type errors, ValidationError } from "express-validation";
 import CustomError from "../../../CustomError/CustomError.js";
 import generalError from "./generalError.js";
 
@@ -37,6 +38,44 @@ describe("Given the controller generalError", () => {
 
       expect(response.status).toBeCalledWith(errorStatus);
       expect(response.json).toBeCalledWith(expectedError);
+    });
+  });
+
+  describe("When it receives a validation error", () => {
+    test("Then it should emit a response with the error status ", async () => {
+      const error: errors = {
+        body: [
+          {
+            name: "ValidationError",
+            isJoi: true,
+            annotate(stripColors) {
+              return "";
+            },
+            _original: "",
+            message: "'email' is not allowed to be empty",
+            details: [
+              {
+                message: "",
+                path: [""],
+                type: "",
+              },
+            ],
+          },
+        ],
+      };
+      const expectedStatus = 400;
+      const publicMessage = "'email' is not allowed to be empty";
+      const validationError = new ValidationError(error, { statusCode: 400 });
+
+      generalError(
+        validationError as unknown as CustomError,
+        request as Request,
+        response as Response,
+        next
+      );
+
+      expect(response.json).toHaveBeenCalledWith({ error: publicMessage });
+      expect(response.status).toBeCalledWith(expectedStatus);
     });
   });
 });
