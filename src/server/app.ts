@@ -4,6 +4,7 @@ import morgan from "morgan";
 import getPing from "./controllers/getPing/getPing.js";
 import generalError from "./middleware/generalError/generalError.js";
 import notFoundError from "./middleware/notFoundError/notFoundError.js";
+import userRouter from "./routers/userRouter/userRouter.js";
 
 const app = express();
 
@@ -22,7 +23,8 @@ app.disable("x-powered-by");
 app.use(morgan("dev"));
 app.use(express.json());
 
-app.use("/", getPing);
+app.get("/", getPing);
+app.use("/user", userRouter);
 
 app.use(notFoundError);
 app.use(generalError);

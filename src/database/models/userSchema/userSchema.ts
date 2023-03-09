@@ -6,14 +6,9 @@ const userSchema = new Schema({
     required: true,
     unique: true,
   },
-  password: { type: String, required: true },
-  email: {
-    type: String,
-    required: true,
-  },
+  password: { type: String },
   isAdmin: {
     type: String,
-    required: true,
   },
 });
 
