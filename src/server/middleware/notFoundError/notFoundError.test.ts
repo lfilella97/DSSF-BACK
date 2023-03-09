@@ -1,6 +1,11 @@
 import { type NextFunction, type Request, type Response } from "express";
 import CustomError from "../../../CustomError/CustomError";
+import statusCodes from "../../../utils/statusCodes";
 import notFoundError from "./notFoundError";
+
+const {
+  clientError: { notFound },
+} = statusCodes;
 
 describe("Given the middleware notFoundError", () => {
   describe("When it receives a request", () => {
@@ -11,7 +16,7 @@ describe("Given the middleware notFoundError", () => {
 
       const expectedError = new CustomError(
         "Path not not found",
-        404,
+        notFound,
         "Endpoint not found"
       );
 

@@ -5,6 +5,13 @@ import { User } from "../../../database/models/userSchema/userSchema";
 import loginUser from "./userControllers";
 import CustomError from "../../../CustomError/CustomError";
 import { type UserCredentials } from "../../types";
+import statusCodes from "../../../utils/statusCodes.js";
+
+const {
+  success: { okCode },
+  clientError: { unauthorized },
+  serverError: { internalServer },
+} = statusCodes;
 
 const bernat = {
   password: "bernat",
@@ -31,7 +38,7 @@ beforeEach(() => jest.clearAllMocks());
 describe("Given logInUser controller", () => {
   describe("When it recieves a request with bernat on body and the credentials are ok`", () => {
     test("Then it should respond with status 200 and generate a token", async () => {
-      const expectedStatus = 200;
+      const expectedStatus = okCode;
       const expectedBody = {
         token: "$2y$10$GT6K.TAnsjnLshM9KdwehOJsmDADR8y2x7tLr3C5CxUvfgh4NZUwm",
       };
@@ -77,7 +84,7 @@ describe("Given logInUser controller", () => {
     test("Then it should call next function with `Incorrect password` error message", async () => {
       const customError = new CustomError(
         "Incorrect password",
-        401,
+        unauthorized,
         "Incorrect credentials"
       );
       const next: NextFunction = jest.fn().mockReturnThis();
@@ -99,7 +106,7 @@ describe("Given logInUser controller", () => {
     test("Then it should call next function with", async () => {
       const customError = new CustomError(
         "Server not responding",
-        500,
+        internalServer,
         "Internal server error"
       );
 

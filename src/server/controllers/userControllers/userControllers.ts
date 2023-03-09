@@ -6,7 +6,12 @@ import createDebug from "debug";
 import CustomError from "../../../CustomError/CustomError.js";
 import { User } from "../../../database/models/userSchema/userSchema.js";
 import { type CustomJwtPayload, type UserCredentials } from "../../types.js";
+import statusCodes from "../../../utils/statusCodes.js";
 
+const {
+  success: { okCode },
+  clientError: { notFound, badRequest, unauthorized },
+} = statusCodes;
 const debug = createDebug("DSSF:ruters:userController:login");
 
 const loginUser = async (
@@ -23,11 +28,19 @@ const loginUser = async (
     const user = await User.findOne({ userName }).exec();
 
     if (!user) {
-      throw new CustomError("Incorrect userName", 400, "Wrong credentials");
+      throw new CustomError(
+        "Incorrect userName",
+        unauthorized,
+        "Wrong credentials"
+      );
     }
 
     if (!(await bcrypt.compare(password, user.password!))) {
-      throw new CustomError("Incorrect password", 401, "Wrong credentials");
+      throw new CustomError(
+        "Incorrect password",
+        unauthorized,
+        "Wrong credentials"
+      );
     }
 
     const jwtPayload: CustomJwtPayload = {
@@ -40,7 +53,7 @@ const loginUser = async (
 
     debug(`${userName} has been logged succesfully`);
 
-    res.status(200).json({ token });
+    res.status(okCode).json({ token });
   } catch (error) {
     next(error);
   }

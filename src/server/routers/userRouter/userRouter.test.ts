@@ -6,6 +6,12 @@ import connectDatabase from "../../../database/connectDatabase";
 import { User } from "../../../database/models/userSchema/userSchema";
 import app from "../../app";
 import { type UserCredentials } from "../../types";
+import statusCodes from "../../../utils/statusCodes";
+
+const {
+  clientError: { unauthorized },
+  success: { okCode },
+} = statusCodes;
 
 let server: MongoMemoryServer;
 
@@ -43,7 +49,7 @@ describe("Given POST user/login route", () => {
       const response = await request(app)
         .post("/user/login")
         .send(mockUser)
-        .expect(200);
+        .expect(okCode);
 
       expect(response.body).toHaveProperty("token");
     });
@@ -59,7 +65,7 @@ describe("Given POST user/login route", () => {
       const response = await request(app)
         .post("/user/login")
         .send(mockUser)
-        .expect(400);
+        .expect(unauthorized);
 
       expect(response.body).toStrictEqual({ error: "Wrong credentials" });
     });
