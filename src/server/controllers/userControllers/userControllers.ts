@@ -26,7 +26,7 @@ const loginUser = async (
       throw new CustomError("Incorrect userName", 400, "Wrong credentials");
     }
 
-    if (await bcrypt.compare(password, user.password!)) {
+    if (!(await bcrypt.compare(password, user.password!))) {
       throw new CustomError("Incorrect password", 401, "Wrong credentials");
     }
 
