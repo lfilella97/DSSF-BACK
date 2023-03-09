@@ -5,7 +5,7 @@ import bcrypt from "bcryptjs";
 import createDebug from "debug";
 import CustomError from "../../../CustomError/CustomError.js";
 import { User } from "../../../database/models/userSchema/userSchema.js";
-import { type UserCredentials } from "../../types.js";
+import { type CustomJwtPayload, type UserCredentials } from "../../types.js";
 
 const debug = createDebug("DSSF:ruters:userController:login");
 
@@ -26,14 +26,12 @@ const loginUser = async (
       throw new CustomError("Incorrect userName", 400, "Wrong credentials");
     }
 
-    const isPassword = await bcrypt.compare(password, user.password!);
-
-    if (!isPassword) {
+    if (await bcrypt.compare(password, user.password!)) {
       throw new CustomError("Incorrect password", 401, "Wrong credentials");
     }
 
-    const jwtPayload = {
-      id: user?._id,
+    const jwtPayload: CustomJwtPayload = {
+      id: user?._id.toString(),
       userName: user?.userName,
       isAdmin: user?.isAdmin,
     };

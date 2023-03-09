@@ -6,7 +6,7 @@ import loginUser from "./userControllers";
 import CustomError from "../../../CustomError/CustomError";
 import { type UserCredentials } from "../../types";
 
-const bernat: UserCredentials = {
+const bernat = {
   password: "bernat",
   userName: "bolicubo",
 };
@@ -43,6 +43,8 @@ describe("Given logInUser controller", () => {
       User.findOne = jest.fn().mockImplementationOnce(() => ({
         exec: jest.fn().mockResolvedValue({
           ...bernat,
+          isAdmin: true,
+          _id: 12345678,
         }),
       }));
 
