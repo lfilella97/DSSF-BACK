@@ -10,5 +10,5 @@ export type UserCredentials = Pick<
 export interface CustomJwtPayload {
   id: string;
   userName: string;
-  isAdmin: boolean;
+  isAdmin?: boolean;
 }
