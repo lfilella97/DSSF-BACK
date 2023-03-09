@@ -1,7 +1,13 @@
 import { type Response, type Request, type NextFunction } from "express";
 import { type errors, ValidationError } from "express-validation";
 import CustomError from "../../../CustomError/CustomError.js";
+import statusCodes from "../../../utils/statusCodes.js";
 import generalError from "./generalError.js";
+
+const {
+  clientError: { notFound, badRequest },
+  serverError: { internalServer },
+} = statusCodes;
 
 const request: Partial<Request> = {};
 const response: Partial<Response> = {
@@ -17,11 +23,11 @@ describe("Given the controller generalError", () => {
     test("Then it should emit a response with the error status 404", async () => {
       const error = new CustomError(
         "Path not not found",
-        404,
+        notFound,
         "Endpoint not found"
       );
 
-      const errorStatus = 404;
+      const errorStatus = notFound;
       generalError(error, request as Request, response as Response, next);
 
       expect(response.status).toBeCalledWith(errorStatus);
@@ -33,7 +39,7 @@ describe("Given the controller generalError", () => {
       const error = new CustomError("", NaN, "");
       const expectedError = { error: "Something went wrong" };
 
-      const errorStatus = 500;
+      const errorStatus = internalServer;
       generalError(error, request as Request, response as Response, next);
 
       expect(response.status).toBeCalledWith(errorStatus);
@@ -63,7 +69,7 @@ describe("Given the controller generalError", () => {
           },
         ],
       };
-      const expectedStatus = 400;
+      const expectedStatus = badRequest;
       const publicMessage = "'email' is not allowed to be empty";
       const validationError = new ValidationError(error, { statusCode: 400 });
 
