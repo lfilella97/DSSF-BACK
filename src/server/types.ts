@@ -12,3 +12,16 @@ export interface CustomJwtPayload {
   userName: string;
   isAdmin?: boolean;
 }
+
+export interface Structure {
+  name: string;
+  owner: string;
+  type: string;
+  coordenateX: string;
+  coordenateY: string;
+  elevation: string;
+  creationTime: string;
+  description: string;
+}
+
+export type Structures = Structure[];

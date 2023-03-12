@@ -6,6 +6,7 @@ import generalError from "./middleware/generalError/generalError.js";
 import notFoundError from "./middleware/notFoundError/notFoundError.js";
 import userRouter from "./routers/userRouter/userRouter.js";
 import options from "../utils/corsOptions.js";
+import structuresRouter from "./routers/structuresRouter/structuresRouter.js";
 
 const app = express();
 
@@ -17,6 +18,7 @@ app.use(express.json());
 
 app.get("/", getPing);
 app.use("/user", userRouter);
+app.use("/structures", structuresRouter);
 
 app.use(notFoundError);
 app.use(generalError);
