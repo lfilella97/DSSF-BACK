@@ -1,6 +1,6 @@
 import { type NextFunction, type Request, type Response } from "express";
-import CustomError from "../../../CustomError/CustomError";
-import { Structure } from "../../../database/models/structuresSchema/structuresSchema";
+import CustomError from "../../../CustomError/CustomError.js";
+import { Structure } from "../../../database/models/structuresSchema/structuresSchema.js";
 
 const getStructures = async (
   req: Request,
