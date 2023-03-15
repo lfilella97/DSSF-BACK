@@ -1,8 +1,12 @@
 import { Router } from "express";
-import { getStructures } from "../../controllers/structuresControllers/structuresControllers.js";
+import {
+  deleteStructure,
+  getStructures,
+} from "../../controllers/structuresControllers/structuresControllers.js";
 
 const structuresRouter = Router();
 
 structuresRouter.get("/", getStructures);
+structuresRouter.delete("/:id", deleteStructure);
 
 export default structuresRouter;
