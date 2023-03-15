@@ -13,20 +13,17 @@ export interface CustomJwtPayload {
   isAdmin?: boolean;
 }
 
-export interface Structure {
+export interface StructureInterface {
   name: string;
   owner: string;
   type: string;
   coordenateX: string;
   coordenateY: string;
   elevation: string;
-  creationTime: string;
+  creationTime: Date;
   description: string;
+  location: string;
+  image: string;
 }
 
-export type Structures = Structure[];
-
-export interface DeleteBodyRequest {
-  token: string;
-  id: string;
-}
+export type StructuresInterface = StructureInterface[];
