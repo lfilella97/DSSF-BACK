@@ -1,4 +1,4 @@
-import { model, Schema } from "mongoose";
+import { model, Schema, SchemaTypes } from "mongoose";
 
 const structureSchema = new Schema({
   name: {
@@ -6,7 +6,7 @@ const structureSchema = new Schema({
     required: true,
   },
   owner: {
-    type: String,
+    type: SchemaTypes.ObjectId,
     required: true,
   },
   type: {
@@ -24,8 +24,15 @@ const structureSchema = new Schema({
   },
   creationTime: {
     type: String,
+    default: Date.now,
   },
   description: {
+    type: String,
+  },
+  location: {
+    type: String,
+  },
+  image: {
     type: String,
   },
 });
