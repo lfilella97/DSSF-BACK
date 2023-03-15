@@ -3,7 +3,6 @@ import statusCodes from "../../../utils/statusCodes";
 import { Structure } from "../../../database/models/structuresSchema/structuresSchema";
 import CustomError from "../../../CustomError/CustomError";
 import { deleteStructure, getStructures } from "./structuresControllers";
-import { type DeleteBodyRequest } from "../../types";
 
 const {
   success: { okCode },
@@ -79,18 +78,14 @@ describe("Given deleteStructure controller", () => {
           "https://sfxfnjejlztsnoxyochi.supabase.co/storage/v1/object/public/structures/Balma%20murada%20del%20Triquell%20Gran.jpg?t=2023-03-14T00%3A52%3A11.396Z",
       };
 
-      request.body = { id: `640fd6f123e7acfcf7100acd` };
+      request.params = { id: `640fd6f123e7acfcf7100acd` };
 
       Structure.findOneAndDelete = jest.fn().mockImplementationOnce(() => ({
         exec: jest.fn().mockResolvedValue(databaseResponse),
       }));
 
       await deleteStructure(
-        request as Request<
-          Record<string, unknown>,
-          Record<string, unknown>,
-          DeleteBodyRequest
-        >,
+        request as Request<{ id: string }>,
         response as Response,
         next
       );
@@ -98,27 +93,70 @@ describe("Given deleteStructure controller", () => {
       expect(response.status).toHaveBeenCalledWith(expectedStatus);
       expect(response.json).toHaveBeenCalledWith(expectedBody);
     });
+  });
 
-    test("Then it should call next function with `Can't delete`, and it does not exists on database", async () => {
-      const customError = new CustomError("Can't delete", 404, "Can't delete");
+  describe("When it recieves a request with empty id: ``", () => {
+    test("Then it should call next function with status 400", async () => {
+      const expectederror = new CustomError(
+        "ObjectId not valid",
+        400,
+        "Wrong data"
+      );
 
-      request.body = { id: `640fd6f123e7acfcf7100acd` };
+      const databaseResponse = {
+        _id: {
+          $oid: "640fd6f123e7acfcf7100acd",
+        },
+        coordenateX: "0.644192006438971",
+        coordenateY: "41.34776900522411",
+        elevation: "428",
+        name: "Balma murada del Triquell gran",
+        owner: "admin",
+        description: "",
+        location: "La Granadella",
+        creationTime: "2020-09-17T20:33:27Z",
+        type: "Construction",
+        image:
+          "https://sfxfnjejlztsnoxyochi.supabase.co/storage/v1/object/public/structures/Balma%20murada%20del%20Triquell%20Gran.jpg?t=2023-03-14T00%3A52%3A11.396Z",
+      };
+
+      request.params = { id: `` };
+
+      Structure.findOneAndDelete = jest.fn().mockImplementationOnce(() => ({
+        exec: jest.fn().mockResolvedValue(databaseResponse),
+      }));
+
+      await deleteStructure(
+        request as Request<{ id: string }>,
+        response as Response,
+        next
+      );
+
+      expect(next).toBeCalledWith(expectederror);
+    });
+  });
+
+  describe("When it recieves a request with a id that does not match with any database structure id", () => {
+    test("Then it should call next function with status 404", async () => {
+      const expectederror = new CustomError(
+        "Can't delete",
+        404,
+        "Can't delete"
+      );
+
+      request.params = { id: `640fd6f123e7acfcf7100ad3` };
 
       Structure.findOneAndDelete = jest.fn().mockImplementationOnce(() => ({
         exec: jest.fn().mockResolvedValue(false),
       }));
 
       await deleteStructure(
-        request as Request<
-          Record<string, unknown>,
-          Record<string, unknown>,
-          DeleteBodyRequest
-        >,
+        request as Request<{ id: string }>,
         response as Response,
         next
       );
 
-      expect(next).toBeCalledWith(customError);
+      expect(next).toBeCalledWith(expectederror);
     });
   });
 });

@@ -1,7 +1,7 @@
 import { type NextFunction, type Request, type Response } from "express";
+import mongoose from "mongoose";
 import CustomError from "../../../CustomError/CustomError.js";
 import { Structure } from "../../../database/models/structuresSchema/structuresSchema.js";
-import { type DeleteBodyRequest } from "../../types.js";
 
 export const getStructures = async (
   req: Request,
@@ -25,19 +25,18 @@ export const getStructures = async (
 };
 
 export const deleteStructure = async (
-  req: Request<
-    Record<string, unknown>,
-    Record<string, unknown>,
-    DeleteBodyRequest
-  >,
+  req: Request<{ id: string }>,
   res: Response,
   next: NextFunction
 ) => {
-  const { id } = req.body;
   try {
-    const deleted = await Structure.findOneAndDelete({
-      _id: id,
-    }).exec();
+    const id = req.params?.id;
+
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      throw new CustomError("ObjectId not valid", 400, "Wrong data");
+    }
+
+    const deleted = await Structure.findByIdAndDelete(id).exec();
 
     if (!deleted) {
       throw new CustomError("Can't delete", 404, "Can't delete");
@@ -45,6 +44,6 @@ export const deleteStructure = async (
 
     res.status(200).json({ deleted: deleted.name });
   } catch (error) {
-    next(error);
+    next(new CustomError((error as Error).message, 400, "Can't delete"));
   }
 };
