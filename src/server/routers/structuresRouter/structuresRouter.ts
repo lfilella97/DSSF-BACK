@@ -1,5 +1,5 @@
 import { Router } from "express";
-import getStructures from "../../controllers/structuresControllers/structuresControllers.js";
+import { getStructures } from "../../controllers/structuresControllers/structuresControllers.js";
 
 const structuresRouter = Router();
 
