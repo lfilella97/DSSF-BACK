@@ -25,3 +25,8 @@ export interface Structure {
 }
 
 export type Structures = Structure[];
+
+export interface DeleteBodyRequest {
+  token: string;
+  id: string;
+}

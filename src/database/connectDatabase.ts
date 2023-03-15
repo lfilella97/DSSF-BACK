@@ -12,6 +12,7 @@ mongoose.set("toJSON", {
     delete ret.__v;
   },
 });
+
 const connectDatabase = async (url: string) => {
   debug("Database conected");
 
