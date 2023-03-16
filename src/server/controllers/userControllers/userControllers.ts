@@ -10,7 +10,7 @@ import statusCodes from "../../../utils/statusCodes.js";
 
 const {
   success: { okCode },
-  clientError: { notFound, badRequest, unauthorized },
+  clientError: { unauthorized },
 } = statusCodes;
 const debug = createDebug("DSSF:ruters:userController:login");
 
