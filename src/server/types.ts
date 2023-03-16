@@ -30,9 +30,12 @@ export interface StructureInterface {
 
 export type StructuresInterface = StructureInterface[];
 
-export type AuthRequest = Request<
-  Record<string, unknown>,
-  Record<string, unknown>,
-  Record<string, unknown>,
-  { token: string }
->;
+export interface CustomStructureRequest
+  extends Request<
+    Record<string, unknown>,
+    Record<string, unknown>,
+    { structure: StructureInterface },
+    { token: string }
+  > {
+  userId: string;
+}
