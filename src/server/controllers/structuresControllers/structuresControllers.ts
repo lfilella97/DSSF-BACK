@@ -54,17 +54,15 @@ export const createStructure = async (
   res: Response,
   next: NextFunction
 ) => {
-  const { structure } = req.body;
+  const structure = req.body;
   const image = req.file?.filename;
   const owner = req.userId;
-
   try {
     const created = await Structure.create({
       ...structure,
       image,
       owner,
     });
-
     if (!created) {
       throw new CustomError(
         `Can't create structure`,
@@ -73,7 +71,7 @@ export const createStructure = async (
       );
     }
 
-    res.status(201).json({ message: `${structure.name} created` });
+    res.status(201).json({ message: `${created.name} created` });
   } catch (error) {
     next(
       new CustomError((error as Error).message, 409, "Can't create structure")
