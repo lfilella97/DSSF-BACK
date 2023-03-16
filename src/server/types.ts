@@ -1,3 +1,5 @@
+import { type Request } from "express";
+
 export interface RegisterUserCredentials {
   email: string;
   userName: string;
@@ -27,3 +29,10 @@ export interface StructureInterface {
 }
 
 export type StructuresInterface = StructureInterface[];
+
+export type AuthRequest = Request<
+  Record<string, unknown>,
+  Record<string, unknown>,
+  Record<string, unknown>,
+  { token: string }
+>;
