@@ -193,9 +193,7 @@ describe("Given the createStructure controller", () => {
 
       request.userId = "w3e45678";
 
-      Structure.create = jest.fn().mockImplementationOnce(() => ({
-        exec: jest.fn().mockResolvedValue(request.body),
-      }));
+      Structure.create = jest.fn().mockResolvedValue(request.body?.structure);
 
       await createStructure(
         request as CustomStructureRequest,
