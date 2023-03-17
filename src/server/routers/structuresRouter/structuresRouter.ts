@@ -12,7 +12,12 @@ import structureSchema from "../../schemas/structureSchema.js";
 import storage from "../../storage.js";
 
 const structuresRouter = Router();
-const upload = multer({ storage });
+const upload = multer({
+  storage,
+  limits: {
+    fileSize: 8000000,
+  },
+});
 
 structuresRouter.get("/", getStructures);
 structuresRouter.delete("/:id", auth, deleteStructure);
