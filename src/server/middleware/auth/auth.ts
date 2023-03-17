@@ -2,13 +2,20 @@ import { type NextFunction, type Response } from "express";
 import jwt from "jsonwebtoken";
 import CustomError from "../../../CustomError/CustomError.js";
 import statusCodes from "../../../utils/statusCodes.js";
-import { type AuthRequest } from "../../types";
+import {
+  type CustomJwtPayload,
+  type CustomStructureRequest,
+} from "../../types";
 
 const {
-  clientError: { forbbiden, unauthorized, tokenExpiredOrInvalid },
+  clientError: { forbbiden, unauthorized },
 } = statusCodes;
 
-const auth = (req: AuthRequest, res: Response, next: NextFunction) => {
+const auth = (
+  req: CustomStructureRequest,
+  res: Response,
+  next: NextFunction
+) => {
   const authHeader = req.header("Authorization");
   try {
     if (!authHeader) {
@@ -29,8 +36,12 @@ const auth = (req: AuthRequest, res: Response, next: NextFunction) => {
 
     const token = authHeader.replace(/^Bearer\s*/i, "");
 
-    jwt.verify(token, process.env.JWT_SECRET!);
+    const { id } = jwt.verify(
+      token,
+      process.env.JWT_SECRET!
+    ) as CustomJwtPayload;
 
+    req.userId = id;
     next();
   } catch (error) {
     next(error);

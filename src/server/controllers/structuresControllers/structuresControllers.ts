@@ -2,6 +2,7 @@ import { type NextFunction, type Request, type Response } from "express";
 import mongoose from "mongoose";
 import CustomError from "../../../CustomError/CustomError.js";
 import { Structure } from "../../../database/models/structuresSchema/structuresSchema.js";
+import { type CustomStructureRequest } from "../../types.js";
 
 export const getStructures = async (
   req: Request,
@@ -45,5 +46,37 @@ export const deleteStructure = async (
     res.status(200).json({ deleted: deleted.name });
   } catch (error) {
     next(new CustomError((error as Error).message, 400, "Can't delete"));
+  }
+};
+
+export const createStructure = async (
+  req: CustomStructureRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  const { structure } = req.body;
+  const image = req.file?.filename;
+  const owner = req.userId;
+
+  try {
+    const created = await Structure.create({
+      ...structure,
+      image,
+      owner,
+    });
+
+    if (!created) {
+      throw new CustomError(
+        `Can't create structure`,
+        409,
+        "Can't create structure"
+      );
+    }
+
+    res.status(201).json({ message: `${structure.name} created` });
+  } catch (error) {
+    next(
+      new CustomError((error as Error).message, 409, "Can't create structure")
+    );
   }
 };

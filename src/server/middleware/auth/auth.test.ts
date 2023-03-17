@@ -2,14 +2,14 @@ import { type Response, type NextFunction, type Request } from "express";
 import jwt from "jsonwebtoken";
 import CustomError from "../../../CustomError/CustomError";
 import statusCodes from "../../../utils/statusCodes";
-import { type AuthRequest } from "../../types";
+import { type CustomStructureRequest } from "../../types";
 import auth from "./auth";
 
 const {
   clientError: { forbbiden, unauthorized },
 } = statusCodes;
 
-const req: Partial<AuthRequest> = {
+const req: Partial<CustomStructureRequest> = {
   header: jest.fn().mockReturnValue(undefined),
 };
 const next: NextFunction = jest.fn();
@@ -24,7 +24,7 @@ describe("Given the auth middleware", () => {
         "Dont have Authorization"
       );
 
-      auth(req as AuthRequest, res as Response, next);
+      auth(req as CustomStructureRequest, res as Response, next);
 
       expect(next).toHaveBeenCalledWith(expectedError);
     });
@@ -40,7 +40,7 @@ describe("Given the auth middleware", () => {
 
       req.header = jest.fn().mockReturnValueOnce("123456");
 
-      auth(req as AuthRequest, res as Response, next);
+      auth(req as CustomStructureRequest, res as Response, next);
 
       expect(next).toHaveBeenCalledWith(expectedError);
     });
@@ -52,7 +52,7 @@ describe("Given the auth middleware", () => {
 
       jwt.verify = jest.fn().mockResolvedValue(true);
 
-      auth(req as AuthRequest, res as Response, next);
+      auth(req as CustomStructureRequest, res as Response, next);
 
       expect(next).toBeCalled();
     });

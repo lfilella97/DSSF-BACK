@@ -2,10 +2,15 @@ import { type NextFunction, type Request, type Response } from "express";
 import statusCodes from "../../../utils/statusCodes";
 import { Structure } from "../../../database/models/structuresSchema/structuresSchema";
 import CustomError from "../../../CustomError/CustomError";
-import { deleteStructure, getStructures } from "./structuresControllers";
+import {
+  createStructure,
+  deleteStructure,
+  getStructures,
+} from "./structuresControllers";
+import { type CustomStructureRequest } from "../../types";
 
 const {
-  success: { okCode },
+  success: { okCode, created },
 } = statusCodes;
 
 const request: Partial<Request> = {};
@@ -157,6 +162,90 @@ describe("Given deleteStructure controller", () => {
       );
 
       expect(next).toBeCalledWith(expectederror);
+    });
+  });
+});
+
+describe("Given the createStructure controller", () => {
+  describe("When it recieves a request with 'Aljub SN08'", () => {
+    test("Then it should respond with a message `Aljub SN08 created`", async () => {
+      const expectedStatus = created;
+      const expectedBody = { message: "Aljub SN08 created" };
+      const request: Partial<CustomStructureRequest> = {
+        body: {
+          structure: {
+            coordenateX: "0.644192006438971",
+            coordenateY: "41.34776900522411",
+            elevation: "428",
+            name: "Aljub SN08",
+            owner: "admin",
+            description: "",
+            location: "La Granadella",
+            creationTime: new Date(),
+            type: "Construction",
+            image:
+              "https://sfxfnjejlztsnoxyochi.supabase.co/storage/v1/object/public/structures/Balma%20murada%20del%20Triquell%20Gran.jpg?t=2023-03-14T00%3A52%3A11.396Z",
+          },
+        },
+      };
+
+      request.file = { filename: "image.png" } as Express.Multer.File;
+
+      request.userId = "w3e45678";
+
+      Structure.create = jest.fn().mockImplementationOnce(() => ({
+        exec: jest.fn().mockResolvedValue(request.body),
+      }));
+
+      await createStructure(
+        request as CustomStructureRequest,
+        response as Response,
+        next
+      );
+
+      expect(response.status).toHaveBeenCalledWith(expectedStatus);
+      expect(response.json).toHaveBeenCalledWith(expectedBody);
+    });
+  });
+
+  describe("When it recieves a request with 'Aljub SN08'", () => {
+    test("Then it should respond with a message `Aljub SN08 created`", async () => {
+      const expectedError = new CustomError(
+        `Can't create structure`,
+        409,
+        "Can't create structure"
+      );
+      const request: Partial<CustomStructureRequest> = {
+        body: {
+          structure: {
+            coordenateX: "0.644192006438971",
+            coordenateY: "41.34776900522411",
+            elevation: "428",
+            name: "Aljub SN08",
+            owner: "admin",
+            description: "",
+            location: "La Granadella",
+            creationTime: new Date(),
+            type: "Construction",
+            image:
+              "https://sfxfnjejlztsnoxyochi.supabase.co/storage/v1/object/public/structures/Balma%20murada%20del%20Triquell%20Gran.jpg?t=2023-03-14T00%3A52%3A11.396Z",
+          },
+        },
+      };
+
+      request.file = { filename: "image.png" } as Express.Multer.File;
+
+      request.userId = "w3e45678";
+
+      Structure.create = jest.fn().mockReturnValue(false);
+
+      await createStructure(
+        request as CustomStructureRequest,
+        response as Response,
+        next
+      );
+
+      expect(next).toHaveBeenCalledWith(expectedError);
     });
   });
 });
