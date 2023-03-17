@@ -5,14 +5,8 @@ import fs from "fs/promises";
 import { supabase, uploadFile } from "./uploadFile";
 import CustomError from "../../../CustomError/CustomError";
 
-const mockUpload = jest.fn().mockReturnValue({
-  error: false,
-});
-
 const mockImagePath = "uploads/image.jpg";
-
 const response: Partial<Response> = {};
-
 const next: NextFunction = jest.fn().mockReturnThis();
 
 beforeEach(() => jest.clearAllMocks());

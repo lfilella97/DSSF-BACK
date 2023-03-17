@@ -1,3 +1,4 @@
+import "../../../loadEnvironment.js";
 import { type NextFunction, type Response } from "express";
 import jwt from "jsonwebtoken";
 import CustomError from "../../../CustomError/CustomError.js";
@@ -16,11 +17,12 @@ const auth = (
   res: Response,
   next: NextFunction
 ) => {
-  const authHeader = req.header("Authorization");
   try {
+    const authHeader = req.header("Authorization");
+
     if (!authHeader) {
       throw new CustomError(
-        "Dont have Authorization",
+        "Dont have Authorization header",
         forbbiden,
         "Dont have Authorization"
       );
@@ -28,9 +30,9 @@ const auth = (
 
     if (!authHeader.includes("Bearer")) {
       throw new CustomError(
-        "Missing authorization header",
+        "Missing Bearer",
         unauthorized,
-        "Missing token"
+        "Dont have Authorization"
       );
     }
 

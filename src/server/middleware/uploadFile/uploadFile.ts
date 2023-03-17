@@ -1,3 +1,4 @@
+import "../../../loadEnvironment.js";
 import { type NextFunction, type Response } from "express";
 import { createClient } from "@supabase/supabase-js";
 import fs from "fs/promises";
@@ -5,8 +6,8 @@ import { type CustomStructureRequest } from "../../types";
 import CustomError from "../../../CustomError/CustomError.js";
 
 export const supabase = createClient(
-  "https://sfxfnjejlztsnoxyochi.supabase.co",
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNmeGZuamVqbHp0c25veHlvY2hpIiwicm9sZSI6ImFub24iLCJpYXQiOjE2Nzg3MzI4MjEsImV4cCI6MTk5NDMwODgyMX0.wmwfc5exMNLoIFXYYakJyK7jnwWkDR1hjNUkrzVq028"
+  `${process.env.SUPABASE_URL!}`,
+  `${process.env.API_GATEWAY!}`
 );
 
 const bucket = supabase.storage.from("structures");

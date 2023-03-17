@@ -1,4 +1,5 @@
 import { model, Schema, SchemaTypes } from "mongoose";
+import { User } from "../userSchema/userSchema";
 
 const structureSchema = new Schema({
   name: {
@@ -7,7 +8,7 @@ const structureSchema = new Schema({
   },
   owner: {
     type: SchemaTypes.ObjectId,
-    required: true,
+    ref: User,
   },
   type: {
     type: String,

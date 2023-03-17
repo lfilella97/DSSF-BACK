@@ -11,7 +11,7 @@ import { mockCustomStrutcureRequest } from "../../../utils/mocks";
 const structure = mockCustomStrutcureRequest.body;
 
 const {
-  success: { okCode },
+  success: { okCode, created },
 } = statusCodes;
 
 let server: MongoMemoryServer;
@@ -54,6 +54,35 @@ describe("Given Delete structure route", () => {
         .delete(`/structures/${id.toString()}`)
         .set({ Authorization: auth })
         .expect(okCode);
+
+      expect(response.body).toStrictEqual(expectedResult);
+    });
+  });
+});
+
+describe("Given Create structure route", () => {
+  describe("When it receives a request with `Aljub SN08`", () => {
+    test("Then it should return an object with the property deleted: `Cova de l'Aranyó Romeo`", async () => {
+      const auth =
+        "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0MDc4ZWJjMjBiZGVjYjcxMzY0OTBlYSIsInVzZXJOYW1lIjoiYm9saWN1Ym8iLCJpc0FkbWluIjp0cnVlLCJpYXQiOjE2Nzg5MjE5NzN9.IaCNZ40hGPGbn1CMT1lEjWjDngYujqyEKX_-X8pZa3g";
+      const expectedResult = { message: "Aljub SN08 created" };
+
+      const response = await request(app)
+        .post(`/structures/create`)
+        .set({ Authorization: auth })
+        .field("name", "Aljub SN08")
+        .field("owner", "1234567890")
+        .field("type", "Water")
+        .field("coordenateX", "12345678")
+        .field("coordenateY", "23456789")
+        .field("elevation", "501")
+        .field("description", "qwertyuio")
+        .field("location", "La Granadella")
+        .attach("image", Buffer.from("uploads"), {
+          filename: "image.JPG",
+        })
+        .field("creationTime", "99999999999")
+        .expect(created);
 
       expect(response.body).toStrictEqual(expectedResult);
     });
