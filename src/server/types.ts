@@ -26,6 +26,7 @@ export interface StructureInterface {
   description: string;
   location: string;
   image: string;
+  imageBackUp: string;
 }
 
 export type StructuresInterface = StructureInterface[];
@@ -34,8 +35,9 @@ export interface CustomStructureRequest
   extends Request<
     Record<string, unknown>,
     Record<string, unknown>,
-    { structure: StructureInterface },
+    StructureInterface,
     { token: string }
   > {
   userId: string;
+  imageBackUp: string;
 }

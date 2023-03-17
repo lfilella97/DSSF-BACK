@@ -8,6 +8,10 @@ import {
   getStructures,
 } from "./structuresControllers";
 import { type CustomStructureRequest } from "../../types";
+import {
+  mockCustomStrutcureRequest,
+  mockDatabaseResponse,
+} from "./structureControllersMocks";
 
 const {
   success: { okCode, created },
@@ -66,22 +70,7 @@ describe("Given deleteStructure controller", () => {
       const expectedStatus = okCode;
       const expectedBody = { deleted: "Balma murada del Triquell gran" };
 
-      const databaseResponse = {
-        _id: {
-          $oid: "640fd6f123e7acfcf7100acd",
-        },
-        coordenateX: "0.644192006438971",
-        coordenateY: "41.34776900522411",
-        elevation: "428",
-        name: "Balma murada del Triquell gran",
-        owner: "admin",
-        description: "",
-        location: "La Granadella",
-        creationTime: "2020-09-17T20:33:27Z",
-        type: "Construction",
-        image:
-          "https://sfxfnjejlztsnoxyochi.supabase.co/storage/v1/object/public/structures/Balma%20murada%20del%20Triquell%20Gran.jpg?t=2023-03-14T00%3A52%3A11.396Z",
-      };
+      const databaseResponse = mockDatabaseResponse;
 
       request.params = { id: `640fd6f123e7acfcf7100acd` };
 
@@ -108,22 +97,7 @@ describe("Given deleteStructure controller", () => {
         "Wrong data"
       );
 
-      const databaseResponse = {
-        _id: {
-          $oid: "640fd6f123e7acfcf7100acd",
-        },
-        coordenateX: "0.644192006438971",
-        coordenateY: "41.34776900522411",
-        elevation: "428",
-        name: "Balma murada del Triquell gran",
-        owner: "admin",
-        description: "",
-        location: "La Granadella",
-        creationTime: "2020-09-17T20:33:27Z",
-        type: "Construction",
-        image:
-          "https://sfxfnjejlztsnoxyochi.supabase.co/storage/v1/object/public/structures/Balma%20murada%20del%20Triquell%20Gran.jpg?t=2023-03-14T00%3A52%3A11.396Z",
-      };
+      const databaseResponse = mockDatabaseResponse;
 
       request.params = { id: `` };
 
@@ -167,33 +141,15 @@ describe("Given deleteStructure controller", () => {
 });
 
 describe("Given the createStructure controller", () => {
-  describe("When it recieves a request with 'Aljub SN08'", () => {
-    test("Then it should respond with a message `Aljub SN08 created`", async () => {
+  describe("When it recieves a request with 'Cova de l'Aranyó Romeo'", () => {
+    test("Then it should respond with a message `Cova de l'Aranyó Romeo created`", async () => {
       const expectedStatus = created;
-      const expectedBody = { message: "Aljub SN08 created" };
-      const request: Partial<CustomStructureRequest> = {
-        body: {
-          structure: {
-            coordenateX: "0.644192006438971",
-            coordenateY: "41.34776900522411",
-            elevation: "428",
-            name: "Aljub SN08",
-            owner: "admin",
-            description: "",
-            location: "La Granadella",
-            creationTime: new Date(),
-            type: "Construction",
-            image:
-              "https://sfxfnjejlztsnoxyochi.supabase.co/storage/v1/object/public/structures/Balma%20murada%20del%20Triquell%20Gran.jpg?t=2023-03-14T00%3A52%3A11.396Z",
-          },
-        },
-      };
+      const expectedBody = { message: "Cova de l'Aranyó Romeo created" };
 
-      request.file = { filename: "image.png" } as Express.Multer.File;
+      const request: Partial<CustomStructureRequest> =
+        mockCustomStrutcureRequest;
 
-      request.userId = "w3e45678";
-
-      Structure.create = jest.fn().mockResolvedValue(request.body?.structure);
+      Structure.create = jest.fn().mockResolvedValue(request.body);
 
       await createStructure(
         request as CustomStructureRequest,
@@ -213,27 +169,9 @@ describe("Given the createStructure controller", () => {
         409,
         "Can't create structure"
       );
-      const request: Partial<CustomStructureRequest> = {
-        body: {
-          structure: {
-            coordenateX: "0.644192006438971",
-            coordenateY: "41.34776900522411",
-            elevation: "428",
-            name: "Aljub SN08",
-            owner: "admin",
-            description: "",
-            location: "La Granadella",
-            creationTime: new Date(),
-            type: "Construction",
-            image:
-              "https://sfxfnjejlztsnoxyochi.supabase.co/storage/v1/object/public/structures/Balma%20murada%20del%20Triquell%20Gran.jpg?t=2023-03-14T00%3A52%3A11.396Z",
-          },
-        },
-      };
 
-      request.file = { filename: "image.png" } as Express.Multer.File;
-
-      request.userId = "w3e45678";
+      const request: Partial<CustomStructureRequest> =
+        mockCustomStrutcureRequest;
 
       Structure.create = jest.fn().mockReturnValue(false);
 

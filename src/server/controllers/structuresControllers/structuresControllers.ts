@@ -54,13 +54,12 @@ export const createStructure = async (
   res: Response,
   next: NextFunction
 ) => {
-  const structure = req.body;
-  const image = req.file?.filename;
+  const { body } = req;
   const owner = req.userId;
   try {
     const created = await Structure.create({
-      ...structure,
-      image,
+      ...body,
+      image: body.imageBackUp,
       owner,
     });
     if (!created) {

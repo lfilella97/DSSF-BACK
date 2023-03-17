@@ -1,9 +1,10 @@
 import { Joi } from "express-validation";
 
-const loginSchema = {
+const structureSchema = {
   body: Joi.object({
     name: Joi.string().required(),
     owner: Joi.string().required(),
+    type: Joi.string().required(),
     coordenateX: Joi.string(),
     coordenateY: Joi.string(),
     elevation: Joi.string().required(),
@@ -13,4 +14,4 @@ const loginSchema = {
   }),
 };
 
-export default loginSchema;
+export default structureSchema;
