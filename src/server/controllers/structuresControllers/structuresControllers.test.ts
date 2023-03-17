@@ -11,7 +11,7 @@ import { type CustomStructureRequest } from "../../types";
 import {
   mockCustomStrutcureRequest,
   mockDatabaseResponse,
-} from "./structureControllersMocks";
+} from "../../../utils/mocks";
 
 const {
   success: { okCode, created },

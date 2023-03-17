@@ -16,19 +16,15 @@ export const uploadFile = async (
   res: Response,
   next: NextFunction
 ) => {
-  if (!req.file) {
-    return;
-  }
-
   try {
-    const imageFile = await fs.readFile(`uploads/${req.file.filename}`);
-    const image = req.file.filename;
+    const image = req.file?.filename;
+    const imageFile = await fs.readFile(`uploads/${image!}`);
 
-    await bucket.upload(`${image}`, imageFile, {
+    await bucket.upload(`${image!}`, imageFile, {
       cacheControl: "31536000000",
     });
 
-    req.body.imageBackUp = bucket.getPublicUrl(image).data.publicUrl;
+    req.body.imageBackUp = bucket.getPublicUrl(image!).data.publicUrl;
 
     next();
   } catch (error) {

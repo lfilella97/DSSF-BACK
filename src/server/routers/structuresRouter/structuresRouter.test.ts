@@ -6,7 +6,7 @@ import connectDatabase from "../../../database/connectDatabase";
 import { Structure } from "../../../database/models/structuresSchema/structuresSchema";
 import statusCodes from "../../../utils/statusCodes";
 import app from "../../app";
-import { mockCustomStrutcureRequest } from "../../controllers/structuresControllers/structureControllersMocks";
+import { mockCustomStrutcureRequest } from "../../../utils/mocks";
 
 const structure = mockCustomStrutcureRequest.body;
 
