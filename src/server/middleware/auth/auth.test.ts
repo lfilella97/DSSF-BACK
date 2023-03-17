@@ -19,7 +19,7 @@ describe("Given the auth middleware", () => {
   describe("When it receives a request without authorization", () => {
     test("Then it should call the method next with an error and the message 'Dont have Authorization'", () => {
       const expectedError = new CustomError(
-        "Dont have Authorization",
+        "Dont have Authorization header",
         forbbiden,
         "Dont have Authorization"
       );
@@ -33,7 +33,7 @@ describe("Given the auth middleware", () => {
   describe("When it receives a request and the authorization header does not contains 'Bearer'", () => {
     test("Then it should call the method next with an error and the message 'Missing bearer in authorization header'", () => {
       const expectedError = new CustomError(
-        "Missing authorization header",
+        "Missing Bearer",
         unauthorized,
         "Missing token"
       );
