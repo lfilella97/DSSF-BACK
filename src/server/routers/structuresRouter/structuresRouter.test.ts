@@ -63,13 +63,13 @@ describe("Given Delete structure route", () => {
 describe("Given Create structure route", () => {
   describe("When it receives a request with `Aljub SN08`", () => {
     test("Then it should return an object with the property deleted: `Cova de l'Aranyó Romeo`", async () => {
-      const auth =
+      const btoken =
         "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0MDc4ZWJjMjBiZGVjYjcxMzY0OTBlYSIsInVzZXJOYW1lIjoiYm9saWN1Ym8iLCJpc0FkbWluIjp0cnVlLCJpYXQiOjE2Nzg5MjE5NzN9.IaCNZ40hGPGbn1CMT1lEjWjDngYujqyEKX_-X8pZa3g";
       const expectedResult = { message: "Aljub SN08 created" };
 
       const response = await request(app)
         .post(`/structures/create`)
-        .set({ Authorization: auth })
+        .set("Authorization", btoken)
         .field("name", "Aljub SN08")
         .field("owner", "1234567890")
         .field("type", "Water")
@@ -78,9 +78,7 @@ describe("Given Create structure route", () => {
         .field("elevation", "501")
         .field("description", "qwertyuio")
         .field("location", "La Granadella")
-        .attach("image", Buffer.from("uploads"), {
-          filename: "image.JPG",
-        })
+        .attach("image", "uploads/testimage.jpg")
         .field("creationTime", "99999999999")
         .expect(created);
 

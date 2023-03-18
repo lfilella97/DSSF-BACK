@@ -7,6 +7,7 @@ import {
   getStructures,
 } from "../../controllers/structuresControllers/structuresControllers.js";
 import auth from "../../middleware/auth/auth.js";
+import sharpFile from "../../middleware/sharpFile/sharpFile.js";
 import { uploadFile } from "../../middleware/uploadFile/uploadFile.js";
 import structureSchema from "../../schemas/structureSchema.js";
 import storage from "../../storage.js";
@@ -26,6 +27,7 @@ structuresRouter.post(
   auth,
   upload.single("image"),
   validate(structureSchema, {}, { abortEarly: false }),
+  sharpFile,
   uploadFile,
   createStructure
 );
