@@ -4,6 +4,7 @@ import multer from "multer";
 import {
   createStructure,
   deleteStructure,
+  getStructure,
   getStructures,
 } from "../../controllers/structuresControllers/structuresControllers.js";
 import auth from "../../middleware/auth/auth.js";
@@ -21,7 +22,11 @@ const upload = multer({
 });
 
 structuresRouter.get("/", getStructures);
+
+structuresRouter.get("/:id", getStructure);
+
 structuresRouter.delete("/:id", auth, deleteStructure);
+
 structuresRouter.post(
   "/create",
   auth,

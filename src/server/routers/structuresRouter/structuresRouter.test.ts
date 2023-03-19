@@ -86,3 +86,13 @@ describe("Given Create structure route", () => {
     });
   });
 });
+
+describe("Given Delete structure route", () => {
+  describe("When it receives a request with the the id `640fd6f123e7acfcf7100ad3`", () => {
+    test("Then it should return an object with the property deleted: `Cova de l'Aranyó Romeo`", async () => {
+      const { _id: id } = await Structure.create(structure);
+
+      await request(app).get(`/structures/${id.toString()}`).expect(okCode);
+    });
+  });
+});
