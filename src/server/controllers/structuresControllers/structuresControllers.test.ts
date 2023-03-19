@@ -5,10 +5,12 @@ import CustomError from "../../../CustomError/CustomError";
 import {
   createStructure,
   deleteStructure,
+  getStructure,
   getStructures,
 } from "./structuresControllers";
 import { type CustomStructureRequest } from "../../types";
 import {
+  expectedByIdResponse,
   mockCustomStrutcureRequest,
   mockDatabaseResponse,
 } from "../../../utils/mocks";
@@ -182,6 +184,77 @@ describe("Given the createStructure controller", () => {
       );
 
       expect(next).toHaveBeenCalledWith(expectedError);
+    });
+  });
+});
+
+describe("Given getStructure controller", () => {
+  describe("When it recieves a request with the id: `640fd6f123e7acfcf7100acd`", () => {
+    test("Then it should respond with status 200 and respond with a structures with id `640fd6f123e7acfcf7100acd`", async () => {
+      const expectedStatus = okCode;
+
+      const databaseResponse = mockDatabaseResponse;
+
+      request.params = { id: `640fd6f123e7acfcf7100acd` };
+
+      Structure.findById = jest.fn().mockImplementationOnce(() => ({
+        exec: jest.fn().mockResolvedValue(databaseResponse),
+      }));
+
+      await getStructure(
+        request as Request<{ id: string }>,
+        response as Response,
+        next
+      );
+
+      expect(response.status).toHaveBeenCalledWith(expectedStatus);
+      expect(response.json).toHaveBeenCalledWith(expectedByIdResponse);
+    });
+  });
+
+  describe("When it recieves a request with empty id: ``", () => {
+    test("Then it should call next function with status 400", async () => {
+      const expectederror = new CustomError(
+        "ObjectId not valid",
+        400,
+        "Wrong data"
+      );
+
+      const databaseResponse = mockDatabaseResponse;
+
+      request.params = { id: `` };
+
+      Structure.findById = jest.fn().mockImplementationOnce(() => ({
+        exec: jest.fn().mockResolvedValue(databaseResponse),
+      }));
+
+      await getStructure(
+        request as Request<{ id: string }>,
+        response as Response,
+        next
+      );
+
+      expect(next).toBeCalledWith(expectederror);
+    });
+  });
+
+  describe("When it recieves a request with a id that does not match with any database structure id", () => {
+    test("Then it should call next function with status 404", async () => {
+      const expectederror = new CustomError("Can't get", 404, "Can't get");
+
+      request.params = { id: `640fd6f123e7acfcf7100ad3` };
+
+      Structure.findById = jest.fn().mockImplementationOnce(() => ({
+        exec: jest.fn().mockResolvedValue(false),
+      }));
+
+      await getStructure(
+        request as Request<{ id: string }>,
+        response as Response,
+        next
+      );
+
+      expect(next).toBeCalledWith(expectederror);
     });
   });
 });

@@ -77,3 +77,27 @@ export const createStructure = async (
     );
   }
 };
+
+export const getStructure = async (
+  req: Request<{ id: string }>,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const id = req.params?.id;
+
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      throw new CustomError("ObjectId not valid", 400, "Wrong data");
+    }
+
+    const structure = await Structure.findById(id).exec();
+
+    if (!structure) {
+      throw new CustomError("Can't get", 404, "Can't get");
+    }
+
+    res.status(200).json({ structure });
+  } catch (error) {
+    next(new CustomError((error as Error).message, 400, "Can't get"));
+  }
+};
