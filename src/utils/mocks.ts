@@ -34,3 +34,20 @@ export const mockCustomStrutcureRequest = {
   file: file as Express.Multer.File,
   userId: "w3e45678",
 };
+
+export const expectedByIdResponse = {
+  structure: {
+    _id: { $oid: "640fd6f123e7acfcf7100acd" },
+    coordenateX: "0.644192006438971",
+    coordenateY: "41.34776900522411",
+    creationTime: "2020-09-17T20:33:27Z",
+    description: "",
+    elevation: "428",
+    image:
+      "https://sfxfnjejlztsnoxyochi.supabase.co/storage/v1/object/public/structures/Balma%20murada%20del%20Triquell%20Gran.jpg?t=2023-03-14T00%3A52%3A11.396Z",
+    location: "La Granadella",
+    name: "Balma murada del Triquell gran",
+    owner: "admin",
+    type: "Construction",
+  },
+};
