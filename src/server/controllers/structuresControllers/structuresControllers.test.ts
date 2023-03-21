@@ -30,11 +30,30 @@ const next: NextFunction = jest.fn().mockReturnThis();
 
 beforeEach(() => jest.clearAllMocks());
 
-describe("Given getStructure controller", () => {
+describe("Given getStructures controller", () => {
   describe("When it recieves a request`", () => {
     test("Then it should respond with status 200 and respond with a list of structures", async () => {
       const expectedStatus = okCode;
       const expectedBody = { structures: [] };
+
+      Structure.find = jest.fn().mockImplementationOnce(() => ({
+        exec: jest.fn().mockResolvedValue([]),
+      }));
+
+      await getStructures(request as Request, response as Response, next);
+
+      expect(response.status).toHaveBeenCalledWith(expectedStatus);
+      expect(response.json).toHaveBeenCalledWith(expectedBody);
+    });
+  });
+
+  describe("When it recieves a request with query type`", () => {
+    test("Then it should respond with status 200 and respond with a list of structures", async () => {
+      const expectedStatus = okCode;
+      const expectedBody = { structures: [] };
+      const request: Partial<Request> = {
+        query: { type: "General" },
+      };
 
       Structure.find = jest.fn().mockImplementationOnce(() => ({
         exec: jest.fn().mockResolvedValue([]),

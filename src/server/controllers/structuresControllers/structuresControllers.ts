@@ -9,8 +9,16 @@ export const getStructures = async (
   res: Response,
   next: NextFunction
 ) => {
-  const structures = await Structure.find().exec();
+  let structures;
+  const type = req.query?.type;
+
   try {
+    if (type) {
+      structures = await Structure.find({ type }).exec();
+    } else {
+      structures = await Structure.find().exec();
+    }
+
     if (!structures) {
       throw new CustomError(
         "Structures not found",
