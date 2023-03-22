@@ -1,4 +1,24 @@
 import { type Request } from "express";
+export interface CustomStructureRequest
+  extends Request<
+    Partial<Params>,
+    Record<string, unknown>,
+    Partial<StructureInterface>,
+    Partial<Query>
+  > {
+  userId?: string;
+  imageBackUp?: string;
+}
+
+export interface Params {
+  id: string;
+}
+export interface Query {
+  page: number;
+  type: string;
+  limit: number;
+  token: string;
+}
 
 export interface RegisterUserCredentials {
   email: string;
@@ -30,14 +50,3 @@ export interface StructureInterface {
 }
 
 export type StructuresInterface = StructureInterface[];
-
-export interface CustomStructureRequest
-  extends Request<
-    Record<string, unknown>,
-    Record<string, unknown>,
-    StructureInterface,
-    { token: string }
-  > {
-  userId: string;
-  imageBackUp: string;
-}
