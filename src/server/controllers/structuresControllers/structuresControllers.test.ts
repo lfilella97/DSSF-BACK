@@ -11,15 +11,18 @@ import {
 import { type CustomStructureRequest } from "../../types";
 import {
   expectedByIdResponse,
+  findErrorMock,
+  findMock,
   mockCustomStrutcureRequest,
   mockDatabaseResponse,
+  mockGetStructuresRequest,
 } from "../../../utils/mocks";
 
 const {
   success: { okCode, created },
 } = statusCodes;
 
-const request: Partial<Request> = {};
+const request: Partial<CustomStructureRequest> = mockGetStructuresRequest;
 
 const response: Partial<Response> = {
   status: jest.fn().mockReturnThis(),
@@ -34,13 +37,20 @@ describe("Given getStructures controller", () => {
   describe("When it recieves a request`", () => {
     test("Then it should respond with status 200 and respond with a list of structures", async () => {
       const expectedStatus = okCode;
-      const expectedBody = { structures: [] };
+      const expectedBody = {
+        structures: [],
+        currentPage: 1,
+        totalPages: 1,
+        totalStructures: 1,
+      };
 
-      Structure.find = jest.fn().mockImplementationOnce(() => ({
-        exec: jest.fn().mockResolvedValue([]),
-      }));
+      Structure.find = jest.fn().mockImplementation(() => findMock);
 
-      await getStructures(request as Request, response as Response, next);
+      await getStructures(
+        request as CustomStructureRequest,
+        response as Response,
+        next
+      );
 
       expect(response.status).toHaveBeenCalledWith(expectedStatus);
       expect(response.json).toHaveBeenCalledWith(expectedBody);
@@ -50,16 +60,24 @@ describe("Given getStructures controller", () => {
   describe("When it recieves a request with query type`", () => {
     test("Then it should respond with status 200 and respond with a list of structures", async () => {
       const expectedStatus = okCode;
-      const expectedBody = { structures: [] };
-      const request: Partial<Request> = {
-        query: { type: "General" },
+      const request: Partial<CustomStructureRequest> = {
+        query: { type: "General", limit: 2, page: 1 },
       };
 
-      Structure.find = jest.fn().mockImplementationOnce(() => ({
-        exec: jest.fn().mockResolvedValue([]),
-      }));
+      const expectedBody = {
+        structures: [],
+        currentPage: 1,
+        totalPages: 1,
+        totalStructures: 1,
+      };
 
-      await getStructures(request as Request, response as Response, next);
+      Structure.find = jest.fn().mockImplementation(() => findMock);
+
+      await getStructures(
+        request as CustomStructureRequest,
+        response as Response,
+        next
+      );
 
       expect(response.status).toHaveBeenCalledWith(expectedStatus);
       expect(response.json).toHaveBeenCalledWith(expectedBody);
@@ -68,19 +86,21 @@ describe("Given getStructures controller", () => {
 
   describe("When it recieves a request but throw an error`", () => {
     test("Then it should call next function with  `Not found` error message", async () => {
-      const customError = new CustomError(
+      const expectedError = new CustomError(
         "Structures not found",
         404,
         "structures not found"
       );
 
-      Structure.find = jest.fn().mockImplementationOnce(() => ({
-        exec: jest.fn().mockResolvedValue(false),
-      }));
+      Structure.find = jest.fn().mockImplementation(() => findErrorMock);
 
-      await getStructures(request as Request, response as Response, next);
+      await getStructures(
+        request as CustomStructureRequest,
+        response as Response,
+        next
+      );
 
-      expect(next).toBeCalledWith(customError);
+      expect(next).toBeCalledWith(expectedError);
     });
   });
 });
