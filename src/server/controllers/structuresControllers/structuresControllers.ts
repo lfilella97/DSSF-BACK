@@ -5,18 +5,31 @@ import { Structure } from "../../../database/models/structuresSchema/structuresS
 import { type CustomStructureRequest } from "../../types.js";
 
 export const getStructures = async (
-  req: Request,
+  req: CustomStructureRequest,
   res: Response,
   next: NextFunction
 ) => {
   let structures;
   const type = req.query?.type;
+  const page = +req.query.page!;
+  const limit = +req.query.limit!;
 
+  let count;
   try {
     if (type) {
-      structures = await Structure.find({ type }).exec();
+      structures = await Structure.find({ type })
+        .skip((page - 1) * limit)
+        .limit(limit)
+        .exec();
+
+      count = await Structure.find({ type }).countDocuments().exec();
     } else {
-      structures = await Structure.find().exec();
+      structures = await Structure.find()
+        .skip((page - 1) * limit)
+        .limit(limit)
+        .exec();
+
+      count = await Structure.find().countDocuments().exec();
     }
 
     if (!structures) {
@@ -27,7 +40,12 @@ export const getStructures = async (
       );
     }
 
-    res.status(200).json({ structures });
+    res.status(200).json({
+      structures,
+      currentPage: page,
+      totalPages: Math.ceil(count / limit),
+      totalStructures: count,
+    });
   } catch (error) {
     next(error);
   }

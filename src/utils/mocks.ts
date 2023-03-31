@@ -1,3 +1,5 @@
+import { type CustomStructureRequest } from "../server/types";
+
 export const mockDatabaseResponse = {
   _id: {
     $oid: "640fd6f123e7acfcf7100acd",
@@ -50,4 +52,28 @@ export const expectedByIdResponse = {
     owner: "admin",
     type: "Construction",
   },
+};
+
+export const mockGetStructuresRequest: Partial<CustomStructureRequest> = {
+  query: { page: 1, limit: 2, token: "qwertyuiop", type: "" },
+};
+
+export const findMock = {
+  skip: jest.fn().mockReturnThis(),
+  limit: jest.fn().mockImplementation(() => ({
+    exec: jest.fn().mockResolvedValue([]),
+  })),
+  countDocuments: jest.fn().mockImplementation(() => ({
+    exec: jest.fn().mockResolvedValue(1),
+  })),
+};
+
+export const findErrorMock = {
+  skip: jest.fn().mockReturnThis(),
+  limit: jest.fn().mockImplementation(() => ({
+    exec: jest.fn().mockResolvedValue(false),
+  })),
+  countDocuments: jest.fn().mockImplementation(() => ({
+    exec: jest.fn().mockResolvedValue(false),
+  })),
 };
