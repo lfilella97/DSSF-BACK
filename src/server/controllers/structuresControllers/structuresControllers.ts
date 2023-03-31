@@ -11,8 +11,9 @@ export const getStructures = async (
 ) => {
   let structures;
   const type = req.query?.type;
-  const page = req.query.page!;
-  const limit = req.query.limit!;
+  const page = +req.query.page!;
+  const limit = +req.query.limit!;
+
   let count;
   try {
     if (type) {
