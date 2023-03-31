@@ -58,23 +58,22 @@ export const mockGetStructuresRequest: Partial<CustomStructureRequest> = {
   query: { page: 1, limit: 2, token: "qwertyuiop", type: "" },
 };
 
-const execMock = jest.fn().mockResolvedValue([]);
-const skipMock = jest.fn().mockReturnThis();
-const limitMock = jest.fn().mockReturnThis();
-const countMock = jest.fn().mockResolvedValue(1);
-
 export const findMock = {
-  skip: skipMock,
-  limit: limitMock,
-  exec: execMock,
-  countDocuments: countMock,
+  skip: jest.fn().mockReturnThis(),
+  limit: jest.fn().mockImplementation(() => ({
+    exec: jest.fn().mockResolvedValue([]),
+  })),
+  countDocuments: jest.fn().mockImplementation(() => ({
+    exec: jest.fn().mockResolvedValue(1),
+  })),
 };
 
-const execErrorMock = jest.fn().mockResolvedValue(false);
-
 export const findErrorMock = {
-  skip: skipMock,
-  limit: limitMock,
-  exec: execErrorMock,
-  countDocuments: countMock,
+  skip: jest.fn().mockReturnThis(),
+  limit: jest.fn().mockImplementation(() => ({
+    exec: jest.fn().mockResolvedValue(false),
+  })),
+  countDocuments: jest.fn().mockImplementation(() => ({
+    exec: jest.fn().mockResolvedValue(false),
+  })),
 };

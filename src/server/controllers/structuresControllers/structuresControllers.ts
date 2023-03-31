@@ -21,13 +21,15 @@ export const getStructures = async (
         .skip((page - 1) * limit)
         .limit(limit)
         .exec();
-      count = await Structure.find({ type }).countDocuments();
+
+      count = await Structure.find({ type }).countDocuments().exec();
     } else {
       structures = await Structure.find()
         .skip((page - 1) * limit)
         .limit(limit)
         .exec();
-      count = await Structure.find().countDocuments();
+
+      count = await Structure.find().countDocuments().exec();
     }
 
     if (!structures) {
